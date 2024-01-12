@@ -1,0 +1,170 @@
+{% extends 'base.html.twig' %} {# commentaire twig  #}
+
+{# twig est le moteur de template de symfony, il peut être utilisé indépendament de symfony #}
+{% block title %}{{ parent() }}Cours twig{% endblock %}
+{#    {{ }} est une directive d'affichage de twig, on parle d'interpolation  parent() rappelle le contenu du bloc défini dans base.html.twig dont on hérite (c'est le gabarit de base) #}
+{% block body %}
+
+
+
+    {#  déclaration d'une variable en twig avec set
+        {%  %}  est une directive fonctionnelle de twig #}
+
+    {% set test="une variable test" %}
+    <p>{{ test }}</p>
+
+    {# la concaténation avec le tilde #}
+    <p>{{ test ~ '!!!!' }}</p>
+    {# equivalent à (mais attention aux espaces) #}
+    {{ test }}{{ '!!!!' }}
+
+    {# structure conditionnelle #}
+    {% if test !='' %}
+        <p>test n'est pas vide</p>
+    {% else %}
+        <p>test est vide</p>
+    {% endif %}
+
+    {% set vrai=true %}
+    {% set faux=false %}
+
+    {# !$faux  en twig donne not faux #}
+    {% if not faux %}
+        <p>faux n'est pas vrai</p>
+    {% endif %}
+
+    {# ||  &&  => or and #}
+    {% if vrai and not faux %}
+        <p>vrai est vrai et faux n'est pas vrai</p>
+    {% endif %}
+
+
+
+    {#  structure itérative: boucle for  #}
+    {# tableau auto-indexé #}
+    {% set tableau=['a','b','c','d'] %}
+    {% for lettre in tableau %}
+        <p>{{ lettre }}</p>
+    {% endfor %}
+
+    {# accéder à un indice du tableau #}
+    <p>{{ tableau[0] }}</p>
+    <p>{{ tableau.0 }}</p>
+
+    {# tableau associatif #}
+    {% set assoc={ nom:'desaulle', prenom:'cesaire', profession: 'dev'   } %}
+
+    {# accès aux données du tableau #}
+    <p>{{ assoc['nom'] }}</p>
+    <p>{{ assoc.nom }}</p>
+
+    {% for indice, valeur in assoc %}
+        {{ indice ~ ':' ~ valeur }}<br>
+    {% endfor %}
+
+    {% set vide=[] %}
+
+    {% for item in vide %}
+        {{ item }}
+
+        {# on entre dans le else si le tableau est vide #}
+    {% else %}
+
+        <p>Le tableau est vide</p>
+    {% endfor %}
+
+
+    {# loop est accessible dans toutes les boucles et donne l'information sur l'état de la boucle #}
+    {% for value in assoc %}
+        <p>Tour N°: {{ loop.index }}</p>{# permet d'afficher le nombre de tour à partir de 1 #}
+        <p>Tour N°: {{ loop.index0 }}</p>{# permet d'afficher le nombre de tour à partir de 0 #}
+        {% if loop.first %}
+            <p>1er tour de boucle</p>
+        {% endif %}
+
+        {% if loop.last %}
+            <p>dernier tour de boucle</p>
+        {% endif %}
+        <p>{{ value }}</p>
+
+
+    {% endfor %}
+
+    {# créer un tableau qui contient les chiffres de 0 à 9 #}
+    {% set chiffres=0..9 %}
+
+    {% for chiffre in chiffres %}
+        {{ chiffre }}<br>
+    {% endfor %}
+
+    {# for($i=0;$i<10;$i++) #}
+    {% for i in 0..9 %}
+        <p>{{ i }}</p>
+    {% endfor %}
+
+    {# if(isset($test)) #}
+    {% if test is defined %}
+        <p>test existe</p>
+    {% endif %}
+
+    {# if(!empty($test)) #}
+    {% if test is not empty %}
+        <p>test n'est pas vide</p>
+    {% endif %}
+
+    {% set dix=10 %}
+
+    {% if dix is divisible by(5) %}
+        <p>dix est divisible par 5</p>
+    {% endif %}
+
+    {% if dix is even %}
+      <p>dix est pair</p>
+    {% endif %}
+
+    {% if dix is not odd %}
+        <p>dix n'est pas impair</p>
+    {% endif %}
+
+    {# les filtres avec PIPE | #}
+    <p>{{ test | upper }}</p>{# passer un mot en majuscule #}
+    <p>{{ test | lower }}</p>{# passer un mot tout en minuscule #}
+
+    {#  si var n'existe pas on entre dans le default et tout est affiché en majuscule  #}
+    <p>{{ var | default('var n\'existe pas') | upper }}</p>
+
+    {#  formatage de date #}
+    <p>{{ '2024-01-11' | date('d/m/Y') }}</p>
+
+    {#  formatage date actuelle #}
+    {{ "now"  | date('d/m/Y H:i:s') }}
+
+    {#  dans le twigController une variable dateDeDemain est renvoyée dans la méthode render #}
+    {# avec les objets dateTime le formatage est obligatoire #}
+    <p>{{ dateDeDemain | date('d/m/Y') }}</p>
+
+    <p>{{ dateDeDemain.format('d-m-Y') }}</p>
+
+    {% set paragraphe="<p>je suis un paragraphe</p>" %}
+
+    {{ paragraphe }}
+    {{ paragraphe | raw }}{#  permet d'interpréter les balises html #}
+
+    {# inclusion traditionnelle #}
+{#    {% include 'twig/include.html.twig' %}#}
+
+    {# inclusion sans acces aux variables du fichier dans lequel on fait l'inclusion #}
+{#    {% include 'twig/include.html.twig' only %}#}
+
+
+    {# permet de donner l'acces à une variable dans le fichier d'inclusion et/ou de la renommer #}
+    {% include 'twig/include.html.twig' with {dix:dix} only %}
+
+
+
+{% endblock %}
+{#  l'ordre d'affichage des bloc dépend de l'ordre dans lequel ils ont été déclaré dans le base.html.twig #}
+{% block titre %}
+    {{ parent() }} Twig
+{% endblock %}
+

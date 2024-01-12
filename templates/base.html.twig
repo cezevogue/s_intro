@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}SYMFONY INTRO | {% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+        {% block stylesheets %}
+{#            <link rel="preload" href="{{ asset('assets/vendor/bootstrap/dist/css/bootstrap.min-6f3e593392adf34505358c68326dee3d.css') }}">#}
+{#            <link rel="preload" href="{{ asset('assets/styles/app-713d9828d7058036a44786836080554c.css') }}">#}
+        {% endblock %}
+
+        {% block javascripts %}
+{% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+    </head>
+    <body>
+    <h1>{% block titre %}
+        Titre de la page
+    {% endblock %}
+    </h1>
+    {% block body %}  {% endblock %}
+    </body>
+</html>
